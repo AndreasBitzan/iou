@@ -1,3 +1,10 @@
+# Fragen? Antworten!  
+Wo sind die Tests gespeichert?  
+In dem Ordner /spec
+
+Welche Arten von Tests sind schon vorhanden?  
+Es gibt Unit Tests und Controller Tests, der Request auf die User API ist auch als Test vorhanden.
+
 # IOU - "I Owe You" - remember the money you owe to friends
 
 this little web app helps you keep track of money
