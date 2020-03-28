@@ -43,3 +43,5 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem "rack-cors", "~> 1.1"
+
+gem "fast_jsonapi", "~> 1.5"

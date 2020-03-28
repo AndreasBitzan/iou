@@ -5,7 +5,7 @@ info:
   version: v1
   description: This is the first version of my API
 paths:
-  "/users.json":
+  "/api/v1/users":
     get:
       summary: list all the users
       produces:
@@ -14,21 +14,71 @@ paths:
         '200':
           description: successful
           schema:
-            type: array
-            items:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        email:
+                          type: string
+                      required:
+                      - name
+                      - email
+                  required:
+                  - id
+                  - type
+                  - attributes
+      tags:
+      - User
+    post:
+      summary: Creates a user
+      tags:
+      - User
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: user
+        in: body
+        schema:
+          type: object
+          properties:
+            data:
               type: object
               properties:
-                id:
-                  type: integer
-                name:
+                type:
                   type: string
-                email:
-                  type: string
-              required:
-              - id
-              - name
-              - email
-  "/users/{id}.json":
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - name
+                  - email
+                  - password
+      responses:
+        '201':
+          description: user created
+        '422':
+          description: password can't be blank, name can't exist, e-mail can't exist
+  "/api/v1/users/{id}":
     get:
       summary: show user
       produces:
@@ -44,13 +94,83 @@ paths:
           schema:
             type: object
             properties:
-              id:
-                type: integer
-              name:
-                type: string
-              email:
-                type: string
-            required:
-            - id
-            - name
-            - email
+              data:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type:
+                    type: string
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      email:
+                        type: string
+                    required:
+                    - name
+                    - email
+                required:
+                - id
+                - type
+                - attributes
+      tags:
+      - User
+    patch:
+      summary: Updates a users data
+      tags:
+      - User
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      - name: user
+        in: body
+        schema:
+          type: object
+          properties:
+            data:
+              type: object
+              properties:
+                type:
+                  type: string
+                id:
+                  type: string
+                attributes:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    email:
+                      type: string
+                    password:
+                      type: string
+                  required:
+                  - name
+                  - email
+                  - password
+      responses:
+        '200':
+          description: 'user updated: Raider heisst jetzt Twix'
+    delete:
+      summary: Deletes a users
+      tags:
+      - User
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: id
+        in: path
+        type: string
+        required: true
+      responses:
+        '204':
+          description: user updated
