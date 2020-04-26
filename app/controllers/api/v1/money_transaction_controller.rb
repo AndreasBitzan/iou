@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::MoneyTransactionsController < Api::V1::BaseController
+class Api::V1::MoneyTransactionController < Api::V1::BaseController
     before_action :set_money_transaction, only: %i[show edit update destroy]
   
     # GET /money_transactions.json
@@ -11,7 +11,10 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
   
     # GET /money_transactions/1
     # GET /money_transactions/1.json
-    def show; end
+    def show
+    money_transaction=MoneyTransaction.find(params[:id])
+    render json: MoneyTransactionSerializer.new(money_transaction).serialized_json
+    end
   
     # GET /money_transactions/new
     def new
@@ -28,11 +31,9 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
   
       respond_to do |format|
         if @money_transaction.save
-          format.html { redirect_to money_transactions_path, notice: 'Money transaction was successfully created.' }
-          format.json { render :show, status: :created, location: @money_transaction }
+            render status: 201, json: MoneyTransactionSerializer.new(@money_transaction).serializable_hash.to_json
         else
-          format.html { render :new }
-          format.json { render json: @money_transaction.errors, status: :unprocessable_entity }
+            render json: { errors: [{title: "Did not work", detail: "Creating the Transaction did not work"}] }, status: 422
         end
       end
     end
@@ -40,28 +41,36 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     # PATCH/PUT /money_transactions/1
     # PATCH/PUT /money_transactions/1.json
     def update
-      respond_to do |format|
-        Rails.logger.warn(money_transaction_params)
+      set_money_transaction
+
         if @money_transaction.update(money_transaction_params)
-          format.html { redirect_to money_transactions_path, notice: 'Money transaction was successfully updated.' }
-          format.json { render :show, status: :ok, location: @money_transaction }
+            render status: :ok, json: MoneyTransactionSerializer.new(@money_transaction).serializable_hash.to_json
         else
-          Rails.logger.warn(@money_transaction.errors.to_json)
-  
-          format.html { render :edit }
-          format.json { render json: @money_transaction.errors, status: :unprocessable_entity }
+            render json: @money_transaction.errors, status: 422  # einfacher error
+            render json: { errors: ErrorSerializer.new(@money_transaction).serialized_json }, status: 422
         end
-      end
+  
     end
   
     # DELETE /money_transactions/1
     # DELETE /money_transactions/1.json
     def destroy
-      @money_transaction.destroy
-      respond_to do |format|
-        format.html { redirect_to money_transactions_url, notice: 'Money transaction was successfully destroyed.' }
-        format.json { head :no_content }
-      end
+      set_money_transaction
+      begin
+        @money_transaction.destroy
+      rescue ActiveRecord::RecordNotFound
+        render json: { errors: [{title: "Not found", detail: "Did not find the transaction"}] }, status: 404
+        return
+      rescue ActiveRecord::InvalidForeignKey
+        render json: { errors: [{title: "Not found", detail: "Transaction cannot be deleted through various reasons."}] }, status: 403
+        return
+      rescue StandardError
+        raise
+      rescue Exception
+        raise
+      end 
+    
+      render json: { head: :no_content }, status: 204
     end
   
     private
