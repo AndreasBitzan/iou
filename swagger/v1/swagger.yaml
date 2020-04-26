@@ -9,7 +9,7 @@ paths:
     get:
       summary: list all the users
       produces:
-      - abpplication/json
+      - application/json
       responses:
         '200':
           description: successful
@@ -174,3 +174,43 @@ paths:
       responses:
         '204':
           description: user updated
+  "/money_transactions.json":
+    get:
+      summary: list all the transactions
+      tags:
+      - MoneyTransaction
+      produces:
+      - application/json
+      responses:
+        '200':
+          description: successful
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    attributes:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        creditor:
+                          type: string
+                        debitor:
+                          type: string
+                        amount:
+                          type: integer
+                      required:
+                      - creditor
+                      - debitor
+                  required:
+                  - id
+                  - type
+                  - attributes

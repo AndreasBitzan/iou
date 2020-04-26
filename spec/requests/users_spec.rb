@@ -11,7 +11,7 @@ RSpec.describe 'Stand Alone API', type: :request do
     path '/api/v1/users' do
       get 'list all the users' do
         tags 'User'
-        produces 'abpplication/json'
+        produces 'application/json'
 
         response(200, 'successful') do
           schema type: :object,
