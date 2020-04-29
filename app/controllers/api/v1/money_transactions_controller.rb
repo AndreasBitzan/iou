@@ -78,9 +78,10 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     end
   
     def money_transaction_params
-        p = params.require(:data).permit(:type, attributes: %i[creditor_id, debitor_id, amount, paid_at])
-        if p[:type] == 'money_transaction'
-            p[:attributes] 
+        p1 = params.require(:data).permit(:type);
+        p2 = params.require(:data).require(:attributes).permit(:creditor_id, :debitor_id, :amount, :paid_at])
+        if p1[:type] == 'money_transaction'
+            p2[:attributes] 
          else
            nil
          end
