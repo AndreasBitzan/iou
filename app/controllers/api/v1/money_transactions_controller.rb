@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::MoneyTransactionController < Api::V1::BaseController
+class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     before_action :set_money_transaction, only: %i[show edit update destroy]
     # GET /money_transactions.json
     def index
