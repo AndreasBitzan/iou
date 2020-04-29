@@ -78,7 +78,7 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     end
   
     def money_transaction_params
-        params.require(:money_transaction).permit(:creditor_id, :debitor_id, :amount, :paid_at)
+        params.require(:data).permit(:type, :creditor_id, :debitor_id, :amount, :paid_at)
     end
   end
   
