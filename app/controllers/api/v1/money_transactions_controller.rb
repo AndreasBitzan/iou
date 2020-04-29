@@ -26,10 +26,10 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     # POST /money_transactions
     # POST /money_transactions.json
     def create
-      @money_transaction = MoneyTransaction.new(money_transaction_params)
+      money_transaction = MoneyTransaction.new(money_transaction_params)
   
-        if @money_transaction.save
-            render status: 201, json: MoneyTransactionSerializer.new(@money_transaction).serializable_hash.to_json
+        if money_transaction.save
+            render status: 201, json: MoneyTransactionSerializer.new(money_transaction).serializable_hash.to_json
         else
             render json: { errors: [{title: "Did not work", detail: "Creating the Transaction did not work"}] }, status: 422
         end
