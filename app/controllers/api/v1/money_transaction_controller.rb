@@ -2,7 +2,7 @@
 
 class Api::V1::MoneyTransactionController < Api::V1::BaseController
     before_action :set_money_transaction, only: %i[show edit update destroy]
-  
+    skip_before_action :verify_authenticity_token
     # GET /money_transactions.json
     def index
         money_transactions=MoneyTransaction.all
