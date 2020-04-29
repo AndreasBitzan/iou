@@ -26,7 +26,7 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     # POST /money_transactions
     # POST /money_transactions.json
     def create
-      money_transaction = MoneyTransaction.new(money_transaction_params)
+      money_transaction = MoneyTransaction.new(money_transaction_attributes)
   
         if money_transaction.save
             render status: 201, json: MoneyTransactionSerializer.new(money_transaction).serializable_hash.to_json
@@ -76,9 +76,12 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     def set_money_transaction
       @money_transaction = MoneyTransaction.find(params[:id])
     end
-  
-    def money_transaction_params
-         params.require(:data).require(:attributes).permit(:creditor_id, :debitor_id, :amount, :paid_at)
+    def money_transaction_attributes
+      money_transaction_params[:attributes] || {}
     end
+    def money_transaction_params
+         params.require(:data).permit(:type, { attributes: [:creditor_id, :debitor_id, :amount, :paid_at]})
+    end
+  
   end
   
