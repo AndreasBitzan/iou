@@ -28,13 +28,12 @@ class Api::V1::MoneyTransactionsController < Api::V1::BaseController
     def create
       @money_transaction = MoneyTransaction.new(money_transaction_params)
   
-      respond_to do |format|
         if @money_transaction.save
             render status: 201, json: MoneyTransactionSerializer.new(@money_transaction).serializable_hash.to_json
         else
             render json: { errors: [{title: "Did not work", detail: "Creating the Transaction did not work"}] }, status: 422
         end
-      end
+      
     end
   
     # PATCH/PUT /money_transactions/1
