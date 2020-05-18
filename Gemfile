@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.5'
+ruby '~> 2.6.5'
 
 gem 'rails', '~> 6.0.1'
 gem 'sassc-rails'
@@ -31,6 +31,11 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'web-console', '>= 3.3.0'
+  gem "capistrano", "~> 3.10", require: false
+  gem "capistrano-rails", "~> 1.3", require: false
+  gem 'capistrano-rbenv', '~> 2.1', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-bundler', '~> 1.6', require: false
 end
 
 group :test do
